@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: backs-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: backs
@@ -14,10 +14,10 @@ spec:
     spec:
       containers:
         - name: backs
-          image: backs:latest   
+          image: eks-frontend:latest
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 5000   
+            - containerPort: 80
         - name: monitoring-pod-exporter
           image: quay.io/prometheus/node-exporter:latest
           ports:

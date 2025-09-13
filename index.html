@@ -4,238 +4,602 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kubernetes Learning Hub</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        header { background: linear-gradient(135deg, #326ce5, #1a4db8); color: white; padding: 2rem 0; text-align: center; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0; }
-        .card { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 4px solid #326ce5; }
-        .card h3 { color: #326ce5; margin-bottom: 15px; }
-        .command { background: #f4f4f4; padding: 10px; border-radius: 4px; font-family: monospace; margin: 5px 0; }
-        .copy-btn { background: #326ce5; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px; }
-        .copy-btn:hover { background: #1a4db8; }
-        .architecture { text-align: center; margin: 20px 0; }
-        .component { display: inline-block; background: #e8f4fd; padding: 10px 15px; margin: 5px; border-radius: 5px; border: 2px solid #326ce5; }
-        .yaml-example { background: #2d3748; color: #e2e8f0; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        .status { padding: 3px 8px; border-radius: 3px; font-size: 12px; font-weight: bold; }
-        .running { background: #c6f6d5; color: #22543d; }
-        .pending { background: #fed7d7; color: #742a2a; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffd700;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 150px 0 100px;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            background: white;
+            margin-top: -50px;
+            border-radius: 20px 20px 0 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .learning-path {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .path-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .path-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .path-card i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .path-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .topic-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: box-shadow 0.3s, transform 0.3s;
+            cursor: pointer;
+        }
+
+        .topic-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+        }
+
+        .topic-card h4 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .topic-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .topic-card li {
+            padding: 0.3rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .topic-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .progress-section {
+            background: #f8f9fa;
+            padding: 60px 0;
+        }
+
+        .progress-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 1rem;
+            position: relative;
+        }
+
+        .progress-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring circle {
+            fill: none;
+            stroke-width: 8;
+        }
+
+        .progress-ring .bg {
+            stroke: #e0e0e0;
+        }
+
+        .progress-ring .progress {
+            stroke: #667eea;
+            stroke-linecap: round;
+            stroke-dasharray: 314;
+            stroke-dashoffset: 251;
+            transition: stroke-dashoffset 0.5s;
+        }
+
+        .resources {
+            background: #667eea;
+            color: white;
+            padding: 60px 0;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .resource-card {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .resource-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .topics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <div class="container">
-            <h1>🚢 Kubernetes Learning Hub</h1>
-            <p>Master Container Orchestration</p>
-        </div>
+        <nav class="container">
+            <div class="logo">
+                <i class="fas fa-dharmachakra"></i> K8s Learning Hub
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#learning-path">Learning Path</a></li>
+                <li><a href="#topics">Topics</a></li>
+                <li><a href="#resources">Resources</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <div class="container">
-        <!-- Core Concepts -->
-        <section>
-            <h2>🎯 Core Concepts</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Pods</h3>
-                    <p>Smallest deployable unit in Kubernetes</p>
-                    <div class="command">kubectl get pods</div>
-                    <div class="command">kubectl describe pod &lt;pod-name&gt;</div>
-                    <div class="command">kubectl logs &lt;pod-name&gt;</div>
-                </div>
-                <div class="card">
-                    <h3>Deployments</h3>
-                    <p>Manages replica sets and rolling updates</p>
-                    <div class="command">kubectl create deployment nginx --image=nginx</div>
-                    <div class="command">kubectl scale deployment nginx --replicas=3</div>
-                    <div class="command">kubectl rollout status deployment/nginx</div>
-                </div>
-                <div class="card">
-                    <h3>Services</h3>
-                    <p>Exposes pods to network traffic</p>
-                    <div class="command">kubectl expose deployment nginx --port=80</div>
-                    <div class="command">kubectl get services</div>
-                    <div class="command">kubectl port-forward service/nginx 8080:80</div>
-                </div>
-                <div class="card">
-                    <h3>ConfigMaps & Secrets</h3>
-                    <p>Configuration and sensitive data management</p>
-                    <div class="command">kubectl create configmap app-config --from-literal=key=value</div>
-                    <div class="command">kubectl create secret generic app-secret --from-literal=password=secret123</div>
+    <section id="home" class="hero">
+        <div class="container">
+            <h1>Master Kubernetes</h1>
+            <p>Complete learning path from beginner to expert with hands-on labs and real-world projects</p>
+            <a href="#learning-path" class="cta-button">Start Learning</a>
+        </div>
+    </section>
+
+    <div class="main-content">
+        <section id="learning-path" class="section">
+            <div class="container">
+                <h2 class="section-title">Learning Paths</h2>
+                <div class="learning-path">
+                    <div class="path-card" onclick="openModal('beginner')">
+                        <i class="fas fa-seedling"></i>
+                        <h3>Beginner</h3>
+                        <p>Start your Kubernetes journey with fundamentals</p>
+                    </div>
+                    <div class="path-card" onclick="openModal('intermediate')">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Intermediate</h3>
+                        <p>Dive deeper into advanced concepts and operations</p>
+                    </div>
+                    <div class="path-card" onclick="openModal('expert')">
+                        <i class="fas fa-crown"></i>
+                        <h3>Expert</h3>
+                        <p>Master production-grade deployments and architecture</p>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Architecture -->
-        <section>
-            <h2>🏗️ Kubernetes Architecture</h2>
-            <div class="architecture">
-                <div class="component">Master Node</div>
-                <div class="component">API Server</div>
-                <div class="component">etcd</div>
-                <div class="component">Scheduler</div>
-                <div class="component">Controller Manager</div>
-                <br>
-                <div class="component">Worker Node</div>
-                <div class="component">kubelet</div>
-                <div class="component">kube-proxy</div>
-                <div class="component">Container Runtime</div>
-            </div>
-        </section>
-
-        <!-- Essential Commands -->
-        <section>
-            <h2>⚡ Essential Commands</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Cluster Info</h3>
-                    <div class="command">kubectl cluster-info</div>
-                    <div class="command">kubectl get nodes</div>
-                    <div class="command">kubectl get namespaces</div>
-                </div>
-                <div class="card">
-                    <h3>Resource Management</h3>
-                    <div class="command">kubectl apply -f deployment.yaml</div>
-                    <div class="command">kubectl delete -f deployment.yaml</div>
-                    <div class="command">kubectl get all</div>
-                </div>
-                <div class="card">
-                    <h3>Debugging</h3>
-                    <div class="command">kubectl exec -it &lt;pod-name&gt; -- /bin/bash</div>
-                    <div class="command">kubectl top nodes</div>
-                    <div class="command">kubectl top pods</div>
+        <section class="progress-section">
+            <div class="container">
+                <div class="progress-card">
+                    <h3>Your Progress</h3>
+                    <div class="progress-ring">
+                        <svg>
+                            <circle class="bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="progress" cx="60" cy="60" r="50"></circle>
+                        </svg>
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5rem; font-weight: bold;">20%</div>
+                    </div>
+                    <p>Keep going! You're making great progress</p>
                 </div>
             </div>
         </section>
 
-        <!-- YAML Examples -->
-        <section>
-            <h2>📄 YAML Examples</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Pod YAML</h3>
-                    <div class="yaml-example">apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx-pod
-spec:
-  containers:
-  - name: nginx
-    image: nginx:latest
-    ports:
-    - containerPort: 80</div>
-                </div>
-                <div class="card">
-                    <h3>Deployment YAML</h3>
-                    <div class="yaml-example">apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nginx-deployment
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:1.20
-        ports:
-        - containerPort: 80</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Service Types -->
-        <section>
-            <h2>🌐 Service Types</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>ClusterIP</h3>
-                    <p>Internal cluster communication only</p>
-                    <div class="command">kubectl expose deployment nginx --type=ClusterIP</div>
-                </div>
-                <div class="card">
-                    <h3>NodePort</h3>
-                    <p>Exposes service on each node's IP</p>
-                    <div class="command">kubectl expose deployment nginx --type=NodePort --port=80</div>
-                </div>
-                <div class="card">
-                    <h3>LoadBalancer</h3>
-                    <p>External load balancer (cloud provider)</p>
-                    <div class="command">kubectl expose deployment nginx --type=LoadBalancer</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Troubleshooting -->
-        <section>
-            <h2>🔧 Troubleshooting</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Pod Issues</h3>
-                    <div class="command">kubectl describe pod &lt;pod-name&gt;</div>
-                    <div class="command">kubectl logs &lt;pod-name&gt; --previous</div>
-                    <div class="command">kubectl get events --sort-by=.metadata.creationTimestamp</div>
-                </div>
-                <div class="card">
-                    <h3>Resource Status</h3>
-                    <p><span class="status running">Running</span> - Pod is healthy</p>
-                    <p><span class="status pending">Pending</span> - Waiting for resources</p>
-                    <p><span class="status pending">CrashLoopBackOff</span> - Container keeps crashing</p>
+        <section id="topics" class="section">
+            <div class="container">
+                <h2 class="section-title">Core Topics</h2>
+                <div class="topics-grid">
+                    <div class="topic-card">
+                        <h4><i class="fas fa-cube"></i> Kubernetes Basics</h4>
+                        <ul>
+                            <li>What is Kubernetes?</li>
+                            <li>Architecture Overview</li>
+                            <li>Cluster Components</li>
+                            <li>kubectl Commands</li>
+                            <li>YAML Manifests</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4><i class="fas fa-box"></i> Pods & Workloads</h4>
+                        <ul>
+                            <li>Pod Lifecycle</li>
+                            <li>ReplicaSets</li>
+                            <li>Deployments</li>
+                            <li>StatefulSets</li>
+                            <li>DaemonSets</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4><i class="fas fa-network-wired"></i> Services & Networking</h4>
+                        <ul>
+                            <li>Service Types</li>
+                            <li>Ingress Controllers</li>
+                            <li>Network Policies</li>
+                            <li>DNS Resolution</li>
+                            <li>Load Balancing</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4><i class="fas fa-database"></i> Storage</h4>
+                        <ul>
+                            <li>Volumes</li>
+                            <li>Persistent Volumes</li>
+                            <li>Storage Classes</li>
+                            <li>ConfigMaps</li>
+                            <li>Secrets</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4><i class="fas fa-shield-alt"></i> Security</h4>
+                        <ul>
+                            <li>RBAC</li>
+                            <li>Service Accounts</li>
+                            <li>Pod Security</li>
+                            <li>Network Security</li>
+                            <li>Image Security</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4><i class="fas fa-chart-line"></i> Monitoring & Logging</h4>
+                        <ul>
+                            <li>Metrics Server</li>
+                            <li>Prometheus</li>
+                            <li>Grafana</li>
+                            <li>ELK Stack</li>
+                            <li>Troubleshooting</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Quick Reference -->
-        <section>
-            <h2>📚 Quick Reference</h2>
-            <div class="card">
-                <h3>Kubectl Shortcuts</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
-                    <div><strong>po</strong> = pods</div>
-                    <div><strong>svc</strong> = services</div>
-                    <div><strong>deploy</strong> = deployments</div>
-                    <div><strong>rs</strong> = replicasets</div>
-                    <div><strong>ns</strong> = namespaces</div>
-                    <div><strong>cm</strong> = configmaps</div>
-                    <div><strong>pv</strong> = persistentvolumes</div>
-                    <div><strong>pvc</strong> = persistentvolumeclaims</div>
+        <section id="resources" class="resources">
+            <div class="container">
+                <h2 class="section-title">Learning Resources</h2>
+                <div class="resource-grid">
+                    <div class="resource-card">
+                        <i class="fas fa-book"></i>
+                        <h4>Documentation</h4>
+                        <p>Official Kubernetes docs and guides</p>
+                    </div>
+                    <div class="resource-card">
+                        <i class="fas fa-laptop-code"></i>
+                        <h4>Hands-on Labs</h4>
+                        <p>Interactive exercises and tutorials</p>
+                    </div>
+                    <div class="resource-card">
+                        <i class="fas fa-certificate"></i>
+                        <h4>Certifications</h4>
+                        <p>CKA, CKAD, and CKS exam prep</p>
+                    </div>
+                    <div class="resource-card">
+                        <i class="fas fa-users"></i>
+                        <h4>Community</h4>
+                        <p>Join forums and discussion groups</p>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Kubernetes Learning Hub. Master the container orchestration platform.</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="beginnerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('beginner')">&times;</span>
+            <h2>Beginner Learning Path</h2>
+            <h3>Week 1-2: Foundations</h3>
+            <ul>
+                <li>Introduction to containers and Docker</li>
+                <li>What is Kubernetes and why use it?</li>
+                <li>Kubernetes architecture and components</li>
+                <li>Setting up a local cluster (minikube/kind)</li>
+            </ul>
+            <h3>Week 3-4: Basic Operations</h3>
+            <ul>
+                <li>kubectl basics and common commands</li>
+                <li>Creating and managing Pods</li>
+                <li>Understanding YAML manifests</li>
+                <li>Labels and selectors</li>
+            </ul>
+            <h3>Week 5-6: Core Workloads</h3>
+            <ul>
+                <li>Deployments and ReplicaSets</li>
+                <li>Services and service discovery</li>
+                <li>ConfigMaps and Secrets</li>
+                <li>Basic troubleshooting</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="intermediateModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('intermediate')">&times;</span>
+            <h2>Intermediate Learning Path</h2>
+            <h3>Week 1-2: Advanced Workloads</h3>
+            <ul>
+                <li>StatefulSets and persistent storage</li>
+                <li>DaemonSets and Jobs</li>
+                <li>Horizontal Pod Autoscaling</li>
+                <li>Resource management and limits</li>
+            </ul>
+            <h3>Week 3-4: Networking</h3>
+            <ul>
+                <li>Ingress controllers and rules</li>
+                <li>Network policies</li>
+                <li>Service mesh basics</li>
+                <li>DNS and service discovery</li>
+            </ul>
+            <h3>Week 5-6: Security & Monitoring</h3>
+            <ul>
+                <li>RBAC and service accounts</li>
+                <li>Pod security policies</li>
+                <li>Monitoring with Prometheus</li>
+                <li>Logging strategies</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="expertModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('expert')">&times;</span>
+            <h2>Expert Learning Path</h2>
+            <h3>Week 1-2: Production Architecture</h3>
+            <ul>
+                <li>Multi-cluster management</li>
+                <li>High availability setup</li>
+                <li>Disaster recovery strategies</li>
+                <li>Cluster upgrades and maintenance</li>
+            </ul>
+            <h3>Week 3-4: Advanced Operations</h3>
+            <ul>
+                <li>Custom Resource Definitions (CRDs)</li>
+                <li>Operators and controllers</li>
+                <li>GitOps and CI/CD integration</li>
+                <li>Performance tuning</li>
+            </ul>
+            <h3>Week 5-6: Enterprise Features</h3>
+            <ul>
+                <li>Service mesh (Istio/Linkerd)</li>
+                <li>Advanced security practices</li>
+                <li>Cost optimization</li>
+                <li>Compliance and governance</li>
+            </ul>
+        </div>
+    </div>
+
     <script>
-        // Copy command functionality
-        document.querySelectorAll('.command').forEach(cmd => {
-            cmd.style.cursor = 'pointer';
-            cmd.title = 'Click to copy';
-            cmd.addEventListener('click', () => {
-                navigator.clipboard.writeText(cmd.textContent);
-                const original = cmd.style.background;
-                cmd.style.background = '#d4edda';
-                setTimeout(() => cmd.style.background = original, 500);
+        function openModal(level) {
+            document.getElementById(level + 'Modal').style.display = 'block';
+        }
+
+        function closeModal(level) {
+            document.getElementById(level + 'Modal').style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
             });
         });
 
-        // Add copy buttons to YAML examples
-        document.querySelectorAll('.yaml-example').forEach(yaml => {
-            const btn = document.createElement('button');
-            btn.className = 'copy-btn';
-            btn.textContent = 'Copy';
-            btn.style.float = 'right';
-            btn.style.marginTop = '-10px';
-            btn.addEventListener('click', () => {
-                navigator.clipboard.writeText(yaml.textContent);
-                btn.textContent = 'Copied!';
-                setTimeout(() => btn.textContent = 'Copy', 1000);
-            });
-            yaml.parentNode.insertBefore(btn, yaml);
+        // Progress animation
+        window.addEventListener('scroll', function() {
+            const progressSection = document.querySelector('.progress-section');
+            const rect = progressSection.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const progressCircle = document.querySelector('.progress');
+                progressCircle.style.strokeDashoffset = '251';
+            }
         });
     </script>
 </body>
