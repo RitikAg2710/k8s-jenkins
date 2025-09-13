@@ -1,0 +1,21 @@
+#AKMS
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: backend-replicaset
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: backs:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
